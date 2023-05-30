@@ -90,11 +90,19 @@ class WaveFront(Canvas):
         self.wave2 = self.create_wavefront(150, 250 + self.cur_d, 350 + self.cur_L)
         self.screen = self.create_line((350 + self.cur_L, 0), (350 + self.cur_L, 500))
 
+class Cur_Vars(Label):
+    def __init__(self):
+        s = 'L = 100мм\nd=0.05мм\nλ=380нм' 
+        super().__init__(window, text=s)
+        self.place(x=50, y=550)
+    def upd(self, new_L, new_d, new_w):
+        s = 'L = ' + str(new_L) + 'мм\n' + 'd = ' + str(new_d / 100) + 'мм\n' + 'λ = ' + str(new_w) + 'нм'
+        self.config(text=s)
 
 def change(newVal):
     test.update_secondary_sources(scale_d.get(), scale_L.get(), scale_wavelength.get())
     Interference.create_picture(scale_d.get(), scale_L.get(), scale_wavelength.get())
-
+    display.upd(scale_L.get(), scale_d.get(), scale_wavelength.get())
 
 window = Tk()
 window.geometry('1066x600')
@@ -116,10 +124,11 @@ scale_L = Scale(window, orient=HORIZONTAL,
                 command=change)
 
 test.update_secondary_sources(scale_d.get(), scale_L.get(), scale_wavelength.get())
-Interference.create_picture(100, 5, 380)
+Interference.create_picture(5, 100, 380)
 
 scale_d.pack()
 scale_wavelength.place(x=700, y=0)
 scale_L.place(x=100, y=0)
+display = Cur_Vars()
 
 window.mainloop()
